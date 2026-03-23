@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kumari's Emerald Party Hall</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="Booking.css">
+    
+    <style>
+        :root {
+            --primary: #5c67f2;
+            --dark: #2d3436;
+            --light: #f9f9fb;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            color: #94098d;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #636e72;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .radio-group {
+            margin-top: 10px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: #4a54e1;
+        }
+
+        #foodOptions {
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>EMERALD MULTI-PURPOSE HALL BOOKING FORM</h2>
+    <p class="subtitle">For Booking, please fill the below form</p>
+
+    <form id="bookingForm">
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="full_name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" placeholder="10 digit mobile number">
+        </div>
+
+        <div class="form-group">
+            <label>Event Date</label>
+            <input type="date" name="event_date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Type of Function</label>
+            <input type="text" name="event_type" required placeholder="Birthday, Anniversary, etc...">
+        </div>
+
+	<div class="time-group">
+
+    		<div class="form-group">
+      		  <label>Event Start Time</label>
+      		  <input type="time" name="start_time" required>
+  	 </div>
+
+    	<div class="form-group">
+     	   <label>Event End Time</label>
+     	   <input type="time" name="end_time" required>
+    	</div>
+
+	<div class="form-group">
+           <label>Event Duration (hours)</label>
+           <input type="text" name="duration_hours" id="duration" readonly placeholder="Auto calculated">
+	</div>
+
+</div>
+
+        <div class="form-group">
+            <label>Estimated Guests</label>
+            <input type="number" name="guests" min="1">
+        </div>
+
+        <div class="form-group">
+    	    <label>Do you want catering services?</label>
+            <div class="radio-group">
+                <input type="radio" name="catering" value="Yes" onclick="toggleCatering(true)" required> Yes
+                <input type="radio" name="catering" value="No" onclick="toggleCatering(false)"> No
+            </div>
+       </div>
+
+<!-- SHOWN ONLY IF YES -->
+<div id="cateringOptions" style="display:none;">
+
+    <div class="form-group">
+        <label>Food Preference</label>
+        <div class="radio-group">
+            <input type="radio" name="food_preference" value="Veg"> Veg
+            <input type="radio" name="food_preference" value="Non-Veg"> Non-Veg
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Meal Type</label>
+        <select name="meal_type">
+            <option value="">Select meal</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+        </select>
+    </div>
+
+</div>
+
+        <button type="submit" class="btn-submit">Send Inquiry</button>
+    </form>
+</div>
+
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+(function(){
+    emailjs.init("yuq6v4ayU2gC5mSRW");
+})();
+
+function calculateDuration() {
+    const start = document.querySelector('input[name="start_time"]').value;
+    const end = document.querySelector('input[name="end_time"]').value;
+    const durationField = document.getElementById("duration");
+
+    if (!start || !end) {
+        durationField.value = "";
+        return;
+    }
+
+    const [startH, startM] = start.split(":").map(Number);
+    const [endH, endM] = end.split(":").map(Number);
+
+    let startMinutes = startH * 60 + startM;
+    let endMinutes = endH * 60 + endM;
+
+    // Handle overnight events (end time next day)
+    if (endMinutes <= startMinutes) {
+        endMinutes += 24 * 60;
+    }
+
+    const diffMinutes = endMinutes - startMinutes;
+    const hours = (diffMinutes / 60).toFixed(2);
+
+    durationField.value = `${hours} hours`;
+}
+
+// Auto-calculate when time changes
+document.querySelector('input[name="start_time"]').addEventListener("change", calculateDuration);
+document.querySelector('input[name="end_time"]').addEventListener("change", calculateDuration);
+
+function toggleCatering(show) {
+    const cateringDiv = document.getElementById("cateringOptions");
+
+    cateringDiv.style.display = show ? "block" : "none";
+
+    // Optional: clear values when NO is selected
+    if (!show) {
+        cateringDiv.querySelectorAll("input, select").forEach(el => el.checked = false || el.value === "");
+    }
+}
+
+document.getElementById("bookingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    emailjs.sendForm(
+        "kumariemrald@gmail.com",
+        "template_00625v8",
+        this
+    ).then(
+        function() {
+            alert("✅ Inquiry sent successfully!");
+            document.getElementById("bookingForm").reset();
+            document.getElementById("foodOptions").style.display = "none";
+        },
+        function(error) {
+            alert("❌ Failed to send inquiry");
+            console.log(error);
+        }
+    );
+});
+</script>
+
+</body>
+</html>
