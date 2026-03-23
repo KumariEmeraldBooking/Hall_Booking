@@ -12,6 +12,7 @@
             --primary: #5c67f2;
             --dark: #2d3436;
             --light: #f9f9fb;
+            --success: #28a745;
         }
 
         body {
@@ -23,10 +24,23 @@
         .container {
             max-width: 600px;
             margin: auto;
-            background: #ffff;
+            background: #ffffff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        /* SUCCESS MESSAGE STYLING */
+        #success-container {
+            display: none; /* Hidden by default */
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            font-size: 50px;
+            color: var(--success);
+            margin-bottom: 20px;
         }
 
         h2 {
@@ -50,11 +64,12 @@
             margin-bottom: 6px;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             border: 1px solid #dfe6e9;
             border-radius: 6px;
+            box-sizing: border-box;
         }
 
         input:focus {
@@ -81,99 +96,104 @@
             background: #4a54e1;
         }
 
-        #foodOptions {
+        #cateringOptions {
             margin-top: 12px;
+            padding: 15px;
+            background: #f1f3f5;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>EMERALD MULTI-PURPOSE HALL BOOKING FORM</h2>
-    <p class="subtitle">For Booking, please fill the below form</p>
+<div class="container" id="main-content">
+    <div id="form-wrapper">
+        <h2>EMERALD MULTI-PURPOSE HALL BOOKING FORM</h2>
+        <p class="subtitle">For Booking, please fill the below form</p>
 
-    <form id="bookingForm">
-
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" name="full_name" required>
-        </div>
-
-        <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" name="phone" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" placeholder="10 digit mobile number">
-        </div>
-
-        <div class="form-group">
-            <label>Event Date</label>
-            <input type="date" name="event_date" required>
-        </div>
-
-        <div class="form-group">
-            <label>Type of Function</label>
-            <input type="text" name="event_type" required placeholder="Birthday, Anniversary, etc...">
-        </div>
-
-	<div class="time-group">
-
-    		<div class="form-group">
-      		  <label>Event Start Time</label>
-      		  <input type="time" name="start_time" required>
-  	 </div>
-
-    	<div class="form-group">
-     	   <label>Event End Time</label>
-     	   <input type="time" name="end_time" required>
-    	</div>
-
-	<div class="form-group">
-           <label>Event Duration (hours)</label>
-           <input type="text" name="duration_hours" id="duration" readonly placeholder="Auto calculated">
-	</div>
-
-</div>
-
-        <div class="form-group">
-            <label>Estimated Guests</label>
-            <input type="number" name="guests" min="1">
-        </div>
-
-        <div class="form-group">
-    	    <label>Do you want catering services?</label>
-            <div class="radio-group">
-                <input type="radio" name="catering" value="Yes" onclick="toggleCatering(true)" required> Yes
-                <input type="radio" name="catering" value="No" onclick="toggleCatering(false)"> No
+        <form id="bookingForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" required>
             </div>
-       </div>
 
-<!-- SHOWN ONLY IF YES -->
-<div id="cateringOptions" style="display:none;">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" name="phone" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" placeholder="10 digit mobile number">
+            </div>
 
-    <div class="form-group">
-        <label>Food Preference</label>
-        <div class="radio-group">
-            <input type="radio" name="food_preference" value="Veg"> Veg
-            <input type="radio" name="food_preference" value="Non-Veg"> Non-Veg
-        </div>
+            <div class="form-group">
+                <label>Event Date</label>
+                <input type="date" name="event_date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Type of Function</label>
+                <input type="text" name="event_type" required placeholder="Birthday, Anniversary, etc...">
+            </div>
+
+            <div class="time-group">
+                <div class="form-group">
+                    <label>Event Start Time</label>
+                    <input type="time" name="start_time" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Event End Time</label>
+                    <input type="time" name="end_time" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Event Duration (hours)</label>
+                    <input type="text" name="duration_hours" id="duration" readonly placeholder="Auto calculated">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Estimated Guests</label>
+                <input type="number" name="guests" min="1">
+            </div>
+
+            <div class="form-group">
+                <label>Do you want catering services?</label>
+                <div class="radio-group">
+                    <input type="radio" name="catering" value="Yes" onclick="toggleCatering(true)" required> Yes
+                    <input type="radio" name="catering" value="No" onclick="toggleCatering(false)"> No
+                </div>
+            </div>
+
+            <div id="cateringOptions" style="display:none;">
+                <div class="form-group">
+                    <label>Food Preference</label>
+                    <div class="radio-group">
+                        <input type="radio" name="food_preference" value="Veg"> Veg
+                        <input type="radio" name="food_preference" value="Non-Veg"> Non-Veg
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Meal Type</label>
+                    <select name="meal_type">
+                        <option value="">Select meal</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Send Inquiry</button>
+        </form>
     </div>
 
-    <div class="form-group">
-        <label>Meal Type</label>
-        <select name="meal_type">
-            <option value="">Select meal</option>
-            <option value="Breakfast">Breakfast</option>
-            <option value="Lunch">Lunch</option>
-            <option value="Dinner">Dinner</option>
-        </select>
+    <div id="success-container">
+        <div class="success-icon">✅</div>
+        <h2 style="color: var(--success);">Inquiry Sent!</h2>
+        <p>Your details have been sent to the owner.</p>
+        <p><strong>Owner will get in touch with you shortly!</strong></p>
     </div>
-
 </div>
 
-        <button type="submit" class="btn-submit">Send Inquiry</button>
-    </form>
-</div>
-
-<!-- EMAILJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
@@ -197,34 +217,33 @@ function calculateDuration() {
     let startMinutes = startH * 60 + startM;
     let endMinutes = endH * 60 + endM;
 
-    // Handle overnight events (end time next day)
     if (endMinutes <= startMinutes) {
         endMinutes += 24 * 60;
     }
 
     const diffMinutes = endMinutes - startMinutes;
     const hours = (diffMinutes / 60).toFixed(2);
-
     durationField.value = `${hours} hours`;
 }
 
-// Auto-calculate when time changes
 document.querySelector('input[name="start_time"]').addEventListener("change", calculateDuration);
 document.querySelector('input[name="end_time"]').addEventListener("change", calculateDuration);
 
 function toggleCatering(show) {
     const cateringDiv = document.getElementById("cateringOptions");
-
     cateringDiv.style.display = show ? "block" : "none";
-
-    // Optional: clear values when NO is selected
-    if (!show) {
-        cateringDiv.querySelectorAll("input, select").forEach(el => el.checked = false || el.value === "");
-    }
 }
 
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
     e.preventDefault();
+
+    const submitBtn = document.getElementById("submitBtn");
+    const formWrapper = document.getElementById("form-wrapper");
+    const successContainer = document.getElementById("success-container");
+
+    // Change button text to show it's working
+    submitBtn.innerText = "Sending...";
+    submitBtn.disabled = true;
 
     emailjs.sendForm(
         "kumariemrald@gmail.com",
@@ -232,12 +251,14 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
         this
     ).then(
         function() {
-            alert("✅ Inquiry sent successfully!");
-            document.getElementById("bookingForm").reset();
-            document.getElementById("foodOptions").style.display = "none";
+            // SUCCESS ACTION:
+            formWrapper.style.display = "none"; // Hide the form
+            successContainer.style.display = "block"; // Show the message
         },
         function(error) {
-            alert("❌ Failed to send inquiry");
+            alert("❌ Failed to send inquiry. Please try again.");
+            submitBtn.innerText = "Send Inquiry";
+            submitBtn.disabled = false;
             console.log(error);
         }
     );
